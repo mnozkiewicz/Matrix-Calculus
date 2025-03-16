@@ -1,6 +1,7 @@
 venv
 .vscode
 build_cpp
+build
 dist
 *egg-info
 *.so
