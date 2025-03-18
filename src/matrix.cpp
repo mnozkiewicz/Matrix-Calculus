@@ -3,11 +3,17 @@
 #include <memory>
 #include <stdexcept>
 #include "matrix.h"
+#include "multiplications.h"
 
 
 Matrix::Matrix(int height, int width, double fill_value): data(std::make_unique<double[]>(height * width)), height(height), width(width) {
     size = height * width;
     for(int i = 0; i < size; ++i) data[i] = fill_value;
+}
+
+Matrix::Matrix(int height, int width, double* memory_buffer): data(std::make_unique<double[]>(height * width)), height(height), width(width){
+    size = height * width;
+    for(int i = 0; i < size; ++i) data[i] = memory_buffer[i];
 }
 
 int Matrix::getHeight() const {
@@ -30,6 +36,31 @@ double& Matrix::operator()(int i, int j) const {
         throw std::out_of_range("Matrix indices out of bounds");
     }
     return data[i * width + j];
+}
+
+
+Matrix Matrix::slice(int r1, int r2, int c1, int c2) const {
+    if (r1 < 0 || r2 > this->height) {
+        throw std::out_of_range("Row indices out of bounds");
+    }
+
+    if (c1 < 0 || c2 > this->width) {
+        throw std::out_of_range("Col indices out of bounds");
+    }
+
+    if(r1 >= r2 || c1 >= c2){
+        throw std::out_of_range("Fist argument of the slice should be smaller than second");
+    }
+
+    Matrix result(r2 - r1, c2 - c1, 0.0);
+
+    for(int i = r1; i < r2; ++i){
+        for(int j = c1; j < c2; ++j){
+            result(i - r1, j - c1) = (*this)(i, j);  
+        }
+    }
+    return result;
+
 }
 
 void Matrix::print() const {
@@ -55,6 +86,32 @@ Matrix Matrix::operator+(const Matrix& other) const{
     return result;
 }
 
+Matrix Matrix::operator-(const Matrix& other) const{
+    if (this->height != other.height || this->width != other.width) {
+        throw std::invalid_argument("Matrices must have the same dimensions for addition");
+    }
+    Matrix result(this->height, this->width, 0.0);
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width; ++j) {
+            result(i, j) = (*this)(i, j) - other(i, j);
+        }
+    }
+    return result;
+}
+
+Matrix Matrix::operator*(const Matrix& other) const{
+    if (this->height != other.height || this->width != other.width) {
+        throw std::invalid_argument("Matrices must have the same dimensions for addition");
+    }
+    Matrix result(this->height, this->width, 0.0);
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width; ++j) {
+            result(i, j) = (*this)(i, j) * other(i, j);
+        }
+    }
+    return result;
+}
+
 Matrix Matrix::operator+(double offset) const{
     Matrix result(this->height, this->width, 0.0);
     for (int i = 0; i < height; ++i) {
@@ -65,6 +122,17 @@ Matrix Matrix::operator+(double offset) const{
     return result;
 }
 
+Matrix Matrix::operator-(double offset) const{
+    Matrix result(this->height, this->width, 0.0);
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width; ++j) {
+            result(i, j) = (*this)(i, j) - offset;
+        }
+    }
+    return result;
+}
+
+
 Matrix Matrix::operator*(double scale) const{
     Matrix result(this->height, this->width, 0.0);
     for (int i = 0; i < height; ++i) {
@@ -74,6 +142,7 @@ Matrix Matrix::operator*(double scale) const{
     }
     return result;
 }
+
 
 Matrix Matrix::operator^(const Matrix& other) const{
     if (this->width != other.height) {
@@ -93,13 +162,36 @@ Matrix Matrix::operator^(const Matrix& other) const{
 }
 
 
+Matrix createRandomMatrix(int height, int width){
+    Matrix matrix = Matrix(height, width, 0.0);
+    std::random_device rd;
+    std::mt19937 gen(rd());  
+    std::uniform_real_distribution<double> dist(0, 1);
+
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width; ++j) {
+            matrix(i, j) = dist(gen);
+        }
+    }
+    return matrix;
+}
+
 int main(){
 
-    Matrix matrix1 = Matrix(4, 4, 0.1);
-    Matrix matrix2 = Matrix(4, 4, 0.3);
-
-    // (matrix1 + matrix2).print();
+    Matrix matrix1 = createRandomMatrix(8, 8);
+    Matrix matrix2 = createRandomMatrix(8, 8);
+    
+    matrix1.print();
+    printf("\n");
+    matrix2.print();
+    printf("\n");
+    (binet(matrix1, matrix2)).print();
+    printf("\n");
+    (strassen(matrix1, matrix2)).print();
+    printf("\n");
     (matrix1 ^ matrix2).print();
+    printf("\n");
+    (hybrid(matrix1, matrix2, 4)).print();
 
     return 0;
 }

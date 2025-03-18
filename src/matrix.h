@@ -14,6 +14,10 @@ public:
     // Constructor to initialize matrix with a specific fill value
     Matrix(int height, int width, double fill_value);
 
+    Matrix(int height, int width, double* memory_buffer);
+    
+    // Matrix(int height, int width, double fill_value);
+
     // Get the height of the matrix (number of rows)
     int getHeight() const;
 
@@ -26,16 +30,30 @@ public:
     // Overload operator() for const access (read-only)
     double& operator()(int i, int j) const;
 
+    Matrix slice(int r1, int r2, int c1, int c2) const;
+
     // Print the matrix (output to console)
     void print() const;
 
     Matrix operator+(const Matrix& other) const;
 
-    Matrix operator^(const Matrix& other) const;
-
     Matrix operator+(double offset) const;
 
+    Matrix operator-(const Matrix& other) const;
+
+    Matrix operator-(double offset) const;
+
+    Matrix operator*(const Matrix& other) const;
+
     Matrix operator*(double scale) const;
+
+    Matrix operator^(const Matrix& other) const;
+
+    // Matrix operator=(const Matrix& other) const;
+
 };
+
+
+Matrix createRandomMatrix(int height, int width);
 
 

@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -Wextra -O2
 
-SRC = matrix.cpp  # Souce file
+SRC = matrix.cpp multiplications.cpp  # Source files
 OBJ = $(SRC:.cpp=.o)      # Object files (.o) corresponding to each source (.cpp)
 EXEC = matrix_program      # Name of the executable
 
