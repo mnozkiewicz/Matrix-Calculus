@@ -2,6 +2,7 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <string>
 
 class Matrix {
 private:
@@ -34,6 +35,8 @@ public:
 
     // Print the matrix (output to console)
     void print() const;
+
+    std::string repr() const;
 
     Matrix operator+(const Matrix& other) const;
 

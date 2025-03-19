@@ -28,6 +28,6 @@ def strassen(mat1: Matrix, mat2: Matrix) -> Matrix:
     check_matrices(mat1, mat2)
     return _strassen(mat1, mat2)
 
-def hybrid(mat1: Matrix, mat2: Matrix) -> Matrix:
+def hybrid(mat1: Matrix, mat2: Matrix, l: int) -> Matrix:
     check_matrices(mat1, mat2)
-    return _hybrid(mat1, mat2)
+    return _hybrid(mat1, mat2, l)
