@@ -92,6 +92,10 @@ Matrix strassen(const Matrix& mat1, const Matrix& mat2){
 
 Matrix hybrid(const Matrix& mat1, const Matrix& mat2, int l){
     int n = mat1.getHeight();
+    if (n == 1){
+        return Matrix(1, 1, mat1(0, 0) * mat2(0, 0));
+    }
+    
     if (n <= l){
         return strassen(mat1, mat2);
     }

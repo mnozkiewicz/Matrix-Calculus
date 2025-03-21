@@ -2,6 +2,7 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <string>
 #include "matrix.h"
 #include "multiplications.h"
 
@@ -70,6 +71,19 @@ void Matrix::print() const {
         }
         std::cout << std::endl;
     }
+}
+
+std::string Matrix::repr() const {
+
+    std::string mat_repr;
+
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width; ++j) {
+            mat_repr += std::to_string((*this)(i, j)) + " ";
+        }
+        mat_repr += "\n";
+    }
+    return mat_repr;
 }
 
 Matrix Matrix::operator+(const Matrix& other) const{

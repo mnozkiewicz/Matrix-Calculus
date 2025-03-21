@@ -53,7 +53,7 @@ PYBIND11_MODULE(matrix_module, m) {
         .def(py::init<int, int, double>())  // Bind constructor
         .def("getHeight", &Matrix::getHeight)  // Bind method
         .def("getWidth", &Matrix::getWidth)
-        .def("print", &Matrix::print)
+        .def("__repr__", &Matrix::repr)
         .def("at", py::overload_cast<int, int>(&Matrix::operator(), py::const_))
         .def("slice", &Matrix::slice)
         .def("__add__", py::overload_cast<const Matrix&>(&Matrix::operator+, py::const_))
