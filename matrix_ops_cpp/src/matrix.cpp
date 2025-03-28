@@ -67,7 +67,7 @@ Matrix Matrix::slice(int r1, int r2, int c1, int c2) const {
 void Matrix::print() const {
     for (int i = 0; i < height; ++i) {
         for (int j = 0; j < width; ++j) {
-            std::cout << (*this)(i, j) << " ";
+            printf("%7.4f   ", (*this)(i, j));
         }
         std::cout << std::endl;
     }
@@ -176,6 +176,29 @@ Matrix Matrix::operator^(const Matrix& other) const{
 }
 
 
+Matrix Matrix::copy() const{
+    int m = (*this).getHeight(), n = (*this).getWidth();
+    Matrix copied = Matrix(m, n, 0.0);
+    for(int i = 0; i < m; i++){
+        for(int j = 0; j < n; j++){
+            copied(i, j) = (*this)(i, j);
+        }
+    }
+    return copied;
+}
+
+Matrix Matrix::transpose() const{
+    int m = (*this).getHeight(), n = (*this).getWidth();
+    Matrix copied = Matrix(n, m, 0.0);
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            copied(i, j) = (*this)(j, i);
+        }
+    }
+    return copied;
+}
+
+
 Matrix createRandomMatrix(int height, int width){
     Matrix matrix = Matrix(height, width, 0.0);
     std::random_device rd;
@@ -188,24 +211,4 @@ Matrix createRandomMatrix(int height, int width){
         }
     }
     return matrix;
-}
-
-int main(){
-
-    Matrix matrix1 = createRandomMatrix(8, 8);
-    Matrix matrix2 = createRandomMatrix(8, 8);
-    
-    matrix1.print();
-    printf("\n");
-    matrix2.print();
-    printf("\n");
-    (binet(matrix1, matrix2)).print();
-    printf("\n");
-    (strassen(matrix1, matrix2)).print();
-    printf("\n");
-    (matrix1 ^ matrix2).print();
-    printf("\n");
-    (hybrid(matrix1, matrix2, 4)).print();
-
-    return 0;
 }

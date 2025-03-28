@@ -2,7 +2,9 @@ from .matrix_module import (
     Matrix,
     createRandomMatrix,
     matrixToNumpy,
-    numpyToMatrix
+    numpyToMatrix,
+    gauss,
+    gauss_pivoting
 )
 
 from .block_mul import (

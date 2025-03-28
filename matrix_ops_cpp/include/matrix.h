@@ -52,6 +52,10 @@ public:
 
     Matrix operator^(const Matrix& other) const;
 
+    Matrix copy() const;
+
+    Matrix transpose() const;
+
     // Matrix operator=(const Matrix& other) const;
 
 };
