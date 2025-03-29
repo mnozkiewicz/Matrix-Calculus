@@ -94,15 +94,25 @@ Matrix gauss_pivoting(Matrix& matrix_org, Matrix& vector_org){
 }
 
 
-std::tuple<Matrix, Matrix> LU(const Matrix& matrix){
-    if (matrix.getHeight() != matrix.getWidth()) {
+std::tuple<Matrix, Matrix> LU(const Matrix& matrix_org){
+    if (matrix_org.getHeight() != matrix_org.getWidth()) {
         throw std::out_of_range("Matrix should be square");
     }
 
-    int n = matrix.getHeight();
-    Matrix L(n, n, 0.0);
-    Matrix U(n, n, 0.0);
+    int n = matrix_org.getHeight();
+    Matrix L(n, n, "identity");
+    Matrix U = matrix_org.copy();
 
+    for(int i = 0; i < n; i++){
+        for(int j = i + 1; j < n; j++){
+            double ratio = U(j, i) / U(i, i);
+            for(int k = 0; k < n; k++){
+                U(j, k) -= U(i, k) * ratio;
+            }
+            L(j, i) = ratio;
+        }
+    }
+    
     return {std::move(L), std::move(U)};
 }
 

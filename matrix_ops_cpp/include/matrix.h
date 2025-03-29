@@ -17,6 +17,9 @@ public:
     // Constructor to initialize matrix from a specific memory 
     Matrix(int height, int width, double* memory_buffer);
 
+    // Constructor to initialize special matrix e.g. identity
+    Matrix(int height, int width, const std::string& matrix_type);
+
     // Move Constructor
     Matrix(Matrix&& other) noexcept;
     

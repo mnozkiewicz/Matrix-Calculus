@@ -3,6 +3,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <stdexcept>
 #include "matrix.h"
 #include "multiplications.h"
 
@@ -13,6 +14,25 @@ Matrix::Matrix(int height, int width, double fill_value): data(std::make_unique<
 
 Matrix::Matrix(int height, int width, double* memory_buffer): data(std::make_unique<double[]>(height * width)), height(height), width(width){
     for(int i = 0; i < height* width; ++i) data[i] = memory_buffer[i];
+}
+
+Matrix::Matrix(int height, int width, const std::string &matrix_type): data(std::make_unique<double[]>(height * width)), height(height), width(width) {
+    if(matrix_type == "identity"){
+        if(height != width){
+            throw std::invalid_argument("Error: Identity matrix needs to have same height and width!");
+        }
+        for(int i = 0; i < height* width; ++i){
+            if (i % (width + 1) == 0){
+                data[i] = 1;
+            }
+            else{
+                data[i] = 0;
+            }
+        }
+    }
+    else{
+        throw std::invalid_argument("Error: Unexisting matrix type given!");
+    }
 }
 
 Matrix::Matrix(Matrix&& other) noexcept : data(std::move(other.data)), height(other.height), width(other.width) {
