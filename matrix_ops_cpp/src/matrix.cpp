@@ -16,7 +16,7 @@ Matrix::Matrix(int height, int width, double* memory_buffer): data(std::make_uni
     for(int i = 0; i < height* width; ++i) data[i] = memory_buffer[i];
 }
 
-Matrix::Matrix(int height, int width, const std::string &matrix_type): data(std::make_unique<double[]>(height * width)), height(height), width(width) {
+Matrix::Matrix(int height, int width, const std::string matrix_type): data(std::make_unique<double[]>(height * width)), height(height), width(width) {
     if(matrix_type == "identity"){
         if(height != width){
             throw std::invalid_argument("Error: Identity matrix needs to have same height and width!");
