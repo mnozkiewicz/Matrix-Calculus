@@ -6,16 +6,14 @@
 int main(){
 
     Matrix matrix = createRandomMatrix(8, 8);
-    Matrix vector = createRandomMatrix(8, 1);
-    Matrix sol1 = gauss_pivoting(matrix, vector);
-    Matrix sol2 = gauss(matrix, vector);
+    auto [L, U] = LU(matrix);
     
     matrix.print();
     printf("\n");
-    vector.transpose().print();
+    L.print();
     printf("\n");
-    sol1.transpose().print();
+    U.print();
     printf("\n");
-    sol2.transpose().print();
+
     return 0;
 }

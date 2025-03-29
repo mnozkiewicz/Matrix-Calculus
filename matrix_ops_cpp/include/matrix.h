@@ -8,17 +8,18 @@ class Matrix {
 private:
     std::unique_ptr<double[]> data;  // Pointer to the data buffer
     int height;                      // Number of rows
-    int width;                       // Number of columns
-    int size;                        // Total number of elements (height * width)
+    int width;                       // Number of columns                       // Total number of elements (height * width)
 
 public:
     // Constructor to initialize matrix with a specific fill value
     Matrix(int height, int width, double fill_value);
 
+    // Constructor to initialize matrix from a specific memory 
     Matrix(int height, int width, double* memory_buffer);
-    
-    // Matrix(int height, int width, double fill_value);
 
+    // Move Constructor
+    Matrix(Matrix&& other) noexcept;
+    
     // Get the height of the matrix (number of rows)
     int getHeight() const;
 
@@ -55,8 +56,6 @@ public:
     Matrix copy() const;
 
     Matrix transpose() const;
-
-    // Matrix operator=(const Matrix& other) const;
 
 };
 

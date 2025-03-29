@@ -8,13 +8,16 @@
 
 
 Matrix::Matrix(int height, int width, double fill_value): data(std::make_unique<double[]>(height * width)), height(height), width(width) {
-    size = height * width;
-    for(int i = 0; i < size; ++i) data[i] = fill_value;
+    for(int i = 0; i < height * width; ++i) data[i] = fill_value;
 }
 
 Matrix::Matrix(int height, int width, double* memory_buffer): data(std::make_unique<double[]>(height * width)), height(height), width(width){
-    size = height * width;
-    for(int i = 0; i < size; ++i) data[i] = memory_buffer[i];
+    for(int i = 0; i < height* width; ++i) data[i] = memory_buffer[i];
+}
+
+Matrix::Matrix(Matrix&& other) noexcept : data(std::move(other.data)), height(other.height), width(other.width) {
+    other.height = 0;
+    other.width = 0;
 }
 
 int Matrix::getHeight() const {

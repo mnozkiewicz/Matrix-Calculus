@@ -92,3 +92,30 @@ Matrix gauss_pivoting(Matrix& matrix_org, Matrix& vector_org){
 
     return sol;
 }
+
+
+std::tuple<Matrix, Matrix> LU(const Matrix& matrix){
+    if (matrix.getHeight() != matrix.getWidth()) {
+        throw std::out_of_range("Matrix should be square");
+    }
+
+    int n = matrix.getHeight();
+    Matrix L(n, n, 0.0);
+    Matrix U(n, n, 0.0);
+
+    return {std::move(L), std::move(U)};
+}
+
+std::tuple<Matrix, Matrix, Matrix> LU_pivoting(const Matrix& matrix){
+    if (matrix.getHeight() != matrix.getWidth()) {
+        throw std::out_of_range("Matrix should be square");
+    }
+
+    int n = matrix.getHeight();
+
+    Matrix P(n, n, 0.0); // Permutation matrix (might be (n, 1) or (1, n) also)
+    Matrix L(n, n, 0.0);
+    Matrix U(n, n, 0.0);
+
+    return {std::move(P), std::move(L), std::move(U)};
+}

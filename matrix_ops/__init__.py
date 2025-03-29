@@ -4,7 +4,9 @@ from .matrix_module import (
     matrixToNumpy,
     numpyToMatrix,
     gauss,
-    gauss_pivoting
+    gauss_pivoting,
+    LU,
+    LU_pivoting
 )
 
 from .block_mul import (
