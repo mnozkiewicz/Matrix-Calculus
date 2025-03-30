@@ -105,6 +105,9 @@ std::tuple<Matrix, Matrix> LU(const Matrix& matrix_org){
 
     for(int i = 0; i < n; i++){
         for(int j = i + 1; j < n; j++){
+            if(U(i, i) == 0){
+                throw std::invalid_argument("Error: Matrix is non LU-able!");
+            }
             double ratio = U(j, i) / U(i, i);
             for(int k = 0; k < n; k++){
                 U(j, k) -= U(i, k) * ratio;
