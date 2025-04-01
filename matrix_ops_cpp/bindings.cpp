@@ -4,6 +4,7 @@
 #include <vector>
 #include "matrix.h"
 #include "multiplications.h"
+#include "gauss_lu.h"
 
 namespace py = pybind11;
 
@@ -49,6 +50,14 @@ PYBIND11_MODULE(matrix_module, m) {
     m.def("_strassen", &strassen, "Strassen matrix multiplication");
     m.def("_hybrid", &hybrid, "Hybrid matrix multiplication");
 
+
+    m.def("gauss", &gauss, "Gauss algorithm for solving lienar equations");
+    m.def("gauss_pivoting", &gauss_pivoting, "Gauss algorithm for solving lienar equations (variant with pivoting)");
+
+
+    m.def("LU", &LU, "LU decomposition");
+    m.def("LU_pivoting", &LU_pivoting, "LU decomposition but with pivoting");
+
     py::class_<Matrix>(m, "Matrix")
         .def(py::init<int, int, double>())  // Bind constructor
         .def("getHeight", &Matrix::getHeight)  // Bind method
@@ -62,5 +71,7 @@ PYBIND11_MODULE(matrix_module, m) {
         .def("__sub__", py::overload_cast<double>(&Matrix::operator-, py::const_))
         .def("__mul__", py::overload_cast<const Matrix&>(&Matrix::operator*, py::const_))
         .def("__mul__", py::overload_cast<double>(&Matrix::operator*, py::const_))
-        .def("__matmul__", &Matrix::operator^);
+        .def("__matmul__", &Matrix::operator^)
+        .def("copy", &Matrix::copy)
+        .def("transpose", &Matrix::transpose);
 }

@@ -3,18 +3,41 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <stdexcept>
 #include "matrix.h"
 #include "multiplications.h"
 
 
 Matrix::Matrix(int height, int width, double fill_value): data(std::make_unique<double[]>(height * width)), height(height), width(width) {
-    size = height * width;
-    for(int i = 0; i < size; ++i) data[i] = fill_value;
+    for(int i = 0; i < height * width; ++i) data[i] = fill_value;
 }
 
 Matrix::Matrix(int height, int width, double* memory_buffer): data(std::make_unique<double[]>(height * width)), height(height), width(width){
-    size = height * width;
-    for(int i = 0; i < size; ++i) data[i] = memory_buffer[i];
+    for(int i = 0; i < height* width; ++i) data[i] = memory_buffer[i];
+}
+
+Matrix::Matrix(int height, int width, const std::string matrix_type): data(std::make_unique<double[]>(height * width)), height(height), width(width) {
+    if(matrix_type == "identity"){
+        if(height != width){
+            throw std::invalid_argument("Error: Identity matrix needs to have same height and width!");
+        }
+        for(int i = 0; i < height* width; ++i){
+            if (i % (width + 1) == 0){
+                data[i] = 1;
+            }
+            else{
+                data[i] = 0;
+            }
+        }
+    }
+    else{
+        throw std::invalid_argument("Error: Unexisting matrix type given!");
+    }
+}
+
+Matrix::Matrix(Matrix&& other) noexcept : data(std::move(other.data)), height(other.height), width(other.width) {
+    other.height = 0;
+    other.width = 0;
 }
 
 int Matrix::getHeight() const {
@@ -67,7 +90,7 @@ Matrix Matrix::slice(int r1, int r2, int c1, int c2) const {
 void Matrix::print() const {
     for (int i = 0; i < height; ++i) {
         for (int j = 0; j < width; ++j) {
-            std::cout << (*this)(i, j) << " ";
+            printf("%7.4f   ", (*this)(i, j));
         }
         std::cout << std::endl;
     }
@@ -176,6 +199,29 @@ Matrix Matrix::operator^(const Matrix& other) const{
 }
 
 
+Matrix Matrix::copy() const{
+    int m = (*this).getHeight(), n = (*this).getWidth();
+    Matrix copied = Matrix(m, n, 0.0);
+    for(int i = 0; i < m; i++){
+        for(int j = 0; j < n; j++){
+            copied(i, j) = (*this)(i, j);
+        }
+    }
+    return copied;
+}
+
+Matrix Matrix::transpose() const{
+    int m = (*this).getHeight(), n = (*this).getWidth();
+    Matrix copied = Matrix(n, m, 0.0);
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            copied(i, j) = (*this)(j, i);
+        }
+    }
+    return copied;
+}
+
+
 Matrix createRandomMatrix(int height, int width){
     Matrix matrix = Matrix(height, width, 0.0);
     std::random_device rd;
@@ -188,24 +234,4 @@ Matrix createRandomMatrix(int height, int width){
         }
     }
     return matrix;
-}
-
-int main(){
-
-    Matrix matrix1 = createRandomMatrix(8, 8);
-    Matrix matrix2 = createRandomMatrix(8, 8);
-    
-    matrix1.print();
-    printf("\n");
-    matrix2.print();
-    printf("\n");
-    (binet(matrix1, matrix2)).print();
-    printf("\n");
-    (strassen(matrix1, matrix2)).print();
-    printf("\n");
-    (matrix1 ^ matrix2).print();
-    printf("\n");
-    (hybrid(matrix1, matrix2, 4)).print();
-
-    return 0;
 }

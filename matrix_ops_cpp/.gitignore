@@ -1,2 +1,3 @@
 matrix_program
 **/*.o
+build
