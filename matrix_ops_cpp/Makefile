@@ -1,5 +1,6 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Iinclude -Wall -Wextra -O2
+LIBS = libs/eigen
+CXXFLAGS = -std=c++17 -Iinclude -I $(LIBS) -Wall -Wextra -O2 
 
 SRC = $(wildcard src/*.cpp)  # Source files (excluding main.cpp)
 OBJ = $(SRC:src/%.cpp=build/%.o) build/main.o  # Object files go to "build/"

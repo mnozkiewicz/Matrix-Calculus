@@ -2,20 +2,19 @@
 #include "matrix.h"
 #include "multiplications.h"
 #include "gauss_lu.h"
+#include <Eigen/Dense>
 
 int main(){
 
-    Matrix matrix = createRandomMatrix(8, 8);
-    auto [P, L, U] = LU_pivoting(matrix);
-    
-    matrix.print();
-    printf("\n");
-    L.print();
-    printf("\n");
-    U.print();
-    printf("\n");
-    (P ^ L ^ U).print();
-    printf("\n");
+    Eigen::MatrixXd A = Eigen::MatrixXd::Random(10, 10);
 
+    A(0, 0) = 0;
+
+    Eigen::JacobiSVD<Eigen::MatrixXd> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
+
+    std::cout << "Singular values:\n" << svd.singularValues() << "\n";
+    std::cout << "U matrix:\n" << svd.matrixU() << "\n";
+    std::cout << "V matrix:\n" << svd.matrixV() << "\n";
+    
     return 0;
 }
